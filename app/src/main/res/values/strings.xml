@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">ParentControlDemo</string>
+    <string name="receiver_label">ParentControlPermissionLabel</string>
+    <string name="receiver_description">ParentControlPermissionDescription</string>
+    <string name="admin_explanation">Here we will explain user why do we need this admin permission</string>
+    <string name="button_become_admin">Enable protection</string>
+    <string name="button_stop_admin">Disable protection</string>
+    <string name="accessibility_service_label">ParentControlAccessibilityLabel</string>
+    <string name="accessibility_service_description">ParentControlAccessibilityDescription</string>
+</resources>
