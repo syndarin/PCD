@@ -4,7 +4,7 @@
                        android:accessibilityFeedbackType="feedbackSpoken"
                        android:canRetrieveWindowContent="true"
                        android:notificationTimeout="100"
-                       android:settingsActivity="com.example.android.apis.accessibility.TestBackActivity"
+                       android:settingsActivity="name.syndarin.devicemanager.MainActivity"
     >
 
 </accessibility-service>

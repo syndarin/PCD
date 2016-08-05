@@ -17,9 +17,7 @@ import java.util.TimerTask;
  */
 public class WatchdogAccessibilityService extends AccessibilityService {
 
-    /*
-        package name - com.android.settings
-     */
+    private static final String TAG = WatchdogAccessibilityService.class.getSimpleName();
 
     private List<String> mLabelsOfProtectedResources;
 
@@ -33,6 +31,11 @@ public class WatchdogAccessibilityService extends AccessibilityService {
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent accessibilityEvent) {
+        if(!ChildProtectionDemoApplication.getsInstance().isProtectionEnabled()) {
+            Log.d(TAG, "Protection is disabled, ignore event");
+            return;
+        }
+
         if (accessibilityEvent.getEventType() == AccessibilityEvent.TYPE_VIEW_CLICKED) {
             List<CharSequence> texts = accessibilityEvent.getText();
             for (CharSequence cs : texts) {

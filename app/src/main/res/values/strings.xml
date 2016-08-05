@@ -3,8 +3,15 @@
     <string name="receiver_label">ParentControlPermissionLabel</string>
     <string name="receiver_description">ParentControlPermissionDescription</string>
     <string name="admin_explanation">Here we will explain user why do we need this admin permission</string>
-    <string name="button_become_admin">Enable protection</string>
+    <string name="button_become_admin">Enable admin mode</string>
     <string name="button_stop_admin">Disable protection</string>
     <string name="accessibility_service_label">ParentControlAccessibilityLabel</string>
     <string name="accessibility_service_description">ParentControlAccessibilityDescription</string>
+    <string name="enable_accessibility_settings">Enable accessibility settings</string>
+    <string name="disable_control">Disable control</string>
+    <string name="enter_1111_pin_to_disable_control">Enter 1111 pin to disable control</string>
+    <string name="description_admin_mode_disabled">To ensure application could not be removed from settings you need to grant administrative privileges</string>
+    <string name="description_admin_mode_enabled">Administrative privileges were already granted</string>
+    <string name="description_accessibility_service_disabled">Accessibility service will protect administrative privileges, preventing manual revoke via Settings. Please, enable \'ParentControlAccessibilityLabel\' item. Unfortunately, this action must be performed by user manually because of security reasons.</string>
+    <string name="description_accessibility_service_enabled">Accessibility service is already active</string>
 </resources>
