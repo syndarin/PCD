@@ -9,17 +9,23 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -43,6 +49,9 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView mTextViewAdminHints;
     private TextView mTextViewAccessoryHints;
+    private TextView mTextViewVpnDescription;
+
+    private CheckBox mCheckBoxVpn;
 
     private BroadcastReceiver mAdminStatusReceiver = new BroadcastReceiver() {
         @Override
@@ -55,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mTextViewVpnDescription = (TextView) findViewById(R.id.text_vpn_description);
 
         mEditTextPassword = (EditText) findViewById(R.id.edit_password);
 
@@ -88,6 +99,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        mCheckBoxVpn = (CheckBox) findViewById(R.id.cb_use_vpn);
+        mCheckBoxVpn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                ChildProtectionDemoApplication.getsInstance().setVpnEnabled(b);
+                mTextViewVpnDescription.setText(b ? R.string.description_vpn_enabled : R.string.description_vpn_enabled);
+            }
+        });
+
         mDevicePolicyManager = (DevicePolicyManager) getSystemService(DEVICE_POLICY_SERVICE);
         mDeviceAdminReceiver = new ComponentName(this, DeviceAdminEventsReceiver.class);
     }
@@ -107,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void invalidateUi(){
         boolean isAdminEnabled = mDevicePolicyManager.isAdminActive(mDeviceAdminReceiver);
+        Log.d(TAG, "is admin enabled - " + isAdminEnabled);
         mButtonManageAdminSettings.setEnabled(!isAdminEnabled);
         mTextViewAdminHints.setText(isAdminEnabled ? R.string.description_admin_mode_enabled : R.string.description_admin_mode_disabled);
 
@@ -143,7 +164,9 @@ public class MainActivity extends AppCompatActivity {
     private boolean isAccessibilityServiceEnabled(){
         AccessibilityManager am = (AccessibilityManager) getSystemService(ACCESSIBILITY_SERVICE);
         List<AccessibilityServiceInfo> enabledServices = am.getEnabledAccessibilityServiceList(AccessibilityEvent.TYPES_ALL_MASK);
+        Log.d(TAG, "Enabled count - " + enabledServices.size());
         for (AccessibilityServiceInfo info : enabledServices) {
+            Log.d(TAG, info.getSettingsActivityName());
             if (info.getSettingsActivityName().equalsIgnoreCase("name.syndarin.devicemanager.MainActivity")){
                 return true;
             }
@@ -164,4 +187,6 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Incorrect password!", Toast.LENGTH_SHORT).show();
         }
     }
+
+
 }

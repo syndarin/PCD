@@ -14,4 +14,6 @@
     <string name="description_admin_mode_enabled">Administrative privileges were already granted</string>
     <string name="description_accessibility_service_disabled">Accessibility service will protect administrative privileges, preventing manual revoke via Settings. Please, enable \'ParentControlAccessibilityLabel\' item. Unfortunately, this action must be performed by user manually because of security reasons.</string>
     <string name="description_accessibility_service_enabled">Accessibility service is already active</string>
+    <string name="description_vpn_disabled">You need enable VPN connection in order to use applications which have Internet access</string>
+    <string name="description_vpn_enabled">Vpn connection is active</string>
 </resources>

@@ -1,7 +1,11 @@
 package name.syndarin.devicemanager;
 
+import android.Manifest;
 import android.accessibilityservice.AccessibilityService;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityWindowInfo;
@@ -21,12 +25,37 @@ public class WatchdogAccessibilityService extends AccessibilityService {
 
     private List<String> mLabelsOfProtectedResources;
 
+    private List<String> mAppsWithInternetPermission;
+
     @Override
     public void onCreate() {
         super.onCreate();
         mLabelsOfProtectedResources = new ArrayList<>();
         mLabelsOfProtectedResources.add(getString(R.string.accessibility_service_label));
         mLabelsOfProtectedResources.add(getString(R.string.receiver_label));
+
+
+        mAppsWithInternetPermission = new ArrayList<>();
+
+        PackageManager pm = getPackageManager();
+        String[] dangerousPermission = new String[]{Manifest.permission.INTERNET};
+        List<PackageInfo> packages = pm.getPackagesHoldingPermissions(dangerousPermission, PackageManager.GET_PERMISSIONS);
+
+        for (PackageInfo pi : packages) {
+            mAppsWithInternetPermission.add(pi.packageName);
+        }
+
+        mAppsWithInternetPermission.remove("com.android.settings");
+        mAppsWithInternetPermission.remove(getLauncherPackageName());
+    }
+
+    private String getLauncherPackageName(){
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        ResolveInfo resolveInfo = getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
+        String currentHomePackage = resolveInfo.activityInfo.packageName;
+        Log.i("tag", "Launcher package name detected - " + currentHomePackage);
+        return currentHomePackage;
     }
 
     @Override
@@ -46,7 +75,18 @@ public class WatchdogAccessibilityService extends AccessibilityService {
                 }
             }
         }
+
+        if (accessibilityEvent.getEventType() == AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED && !ChildProtectionDemoApplication.getsInstance().isVpnEnabled()) {
+
+            String packageName = accessibilityEvent.getPackageName().toString();
+
+            if (mAppsWithInternetPermission.contains(packageName)) {
+                closeCurrentWindow();
+            }
+        }
     }
+
+
 
     private void closeCurrentWindow() {
         new Timer().schedule(new TimerTask() {

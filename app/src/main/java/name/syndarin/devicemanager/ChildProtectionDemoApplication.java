@@ -15,6 +15,8 @@ public class ChildProtectionDemoApplication extends Application {
 
     private boolean mProtectionEnabled;
 
+    private boolean mVpnEnabled;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -27,5 +29,13 @@ public class ChildProtectionDemoApplication extends Application {
 
     public void setProtectionEnabled(boolean protectionEnabled) {
         mProtectionEnabled = protectionEnabled;
+    }
+
+    public boolean isVpnEnabled() {
+        return mVpnEnabled;
+    }
+
+    public void setVpnEnabled(boolean vpnEnabled) {
+        mVpnEnabled = vpnEnabled;
     }
 }
