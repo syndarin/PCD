@@ -176,6 +176,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void openAccessibilityServiceSettings(){
         Intent intent = new Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS);
+        intent.setFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
         startActivityForResult(intent, 0);
     }
 
